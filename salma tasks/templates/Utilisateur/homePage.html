@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Accueil - Echo-Anc{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="hero-section text-center">
+                <h1 class="display-4 mb-4">Bienvenue sur Echo-Anc</h1>
+                <p class="lead mb-4">Votre plateforme de confiance pour les petites annonces</p>
+                <div class="search-box mx-auto">
+                    <form  method="GET" class="d-flex justify-content-center">
+                        <div class="input-group" style="max-width: 600px;">
+                            <input type="text" name="q" class="form-control" placeholder="Rechercher une annonce...">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i> Rechercher
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Dashboard Section -->
+    {% if user.is_authenticated %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="dashboard-section">
+                <h2 class="mb-4">Tableau de bord</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-circle fa-3x mb-3"></i>
+                                <h5 class="card-title">Mon Profil</h5>
+                                <p class="card-text">Gérez vos informations personnelles</p>
+                                <a href="{% url 'Profil_User' user.id %}" class="btn btn-outline-primary">Consulter</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-bullhorn fa-3x mb-3"></i>
+                                <h5 class="card-title">Mes Annonces</h5>
+                                <p class="card-text">Gérez vos annonces publiées</p>
+                                <a  class="btn btn-outline-primary">Voir mes annonces</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-heart fa-3x mb-3"></i>
+                                <h5 class="card-title">Favoris</h5>
+                                <p class="card-text">Consultez vos annonces favorites</p>
+                                <a  class="btn btn-outline-primary">Voir les favoris</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Featured Categories -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Catégories populaires</h2>
+            <div class="row">
+                {% for category in categories %}
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <a  class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-icon">
+                                <i class="{{ category.icon }}"></i>
+                            </div>
+                            <h5 class="category-title">{{ category.name }}</h5>
+                            <p class="category-count">{{ category.ad_count }} annonces</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Ads -->
+   <div class="row mb-5">
+    <div class="col-12">
+        <h2 class="mb-4">Dernières annonces</h2>
+        <div class="row">
+            {% for ad in latest_ads %}
+            <div class="col-md-4 mb-4">
+                <div class="card ad-card">
+                    {% if ad.images %}
+                        {% comment %} {% for  in  %} {% endcomment %}
+                        
+                            <img src="{{ MEDIA_URL }}{{ image }}" width="10%" alt="Image annonce">
+
+                        {% comment %} {% endfor %} {% endcomment %}
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ ad.titre }}</h5>
+                        <p class="card-text">{{ ad.description|truncatewords:20 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price">{{ ad.prix }} €</span>
+                            <a class="btn btn-primary">Voir plus</a>
+                            <a href="#" class="btn btn-outline-danger"><i class="fas fa-heart"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--beige) 0%, var(--light-beige) 100%);
+        padding: 4rem 2rem;
+        border-radius: 20px;
+        box-shadow: var(--glass-shadow);
+    }
+
+    .search-box .input-group {
+        background: var(--glass-bg);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .search-box .form-control {
+        border: none;
+        padding: 1rem;
+        background: transparent;
+    }
+
+    .search-box .btn {
+        padding: 1rem 2rem;
+        background: var(--burgundy);
+        border: none;
+    }
+
+    .search-box .btn:hover {
+        background: var(--orange);
+    }
+
+    .dashboard-card {
+        background: var(--light-beige);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--glass-shadow);
+    }
+
+    .dashboard-card i {
+        color: var(--burgundy);
+    }
+
+    .category-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--glass-shadow);
+    }
+
+    .category-icon {
+        font-size: 2.5rem;
+        color: var(--burgundy);
+        margin-bottom: 1rem;
+    }
+
+    .category-title {
+        color: var(--deep-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .category-count {
+        color: var(--burgundy);
+        font-size: 0.9rem;
+    }
+
+    .ad-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .ad-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--glass-shadow);
+    }
+
+    .ad-card .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .ad-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .ad-card .price {
+        color: var(--orange);
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .btn-primary {
+        background: var(--burgundy);
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: var(--orange);
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-primary {
+        color: var(--burgundy);
+        border-color: var(--burgundy);
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--burgundy);
+        color: var(--white);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %} 

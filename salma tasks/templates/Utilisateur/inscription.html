@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Echo-Anc</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-purple: #210F37;
+            --burgundy: #4F1C51;
+            --orange: #A55B4B;
+            --beige: #DCA06D;
+            --white: #FFFFFF;
+            --light-beige: #F5ECE0;
+            --deep-purple-light: #2d1a4a;
+            --burgundy-light: #6b2a6e;
+            --orange-light: #c06b5b;
+            --beige-light: #e4b78d;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--beige) 0%, var(--light-beige) 100%);
+            font-family: 'Poppins', sans-serif;
+            color: var(--deep-purple);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .section {
+            background: rgba(245, 236, 224, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            animation: fadeIn 0.5s ease;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-floating {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-floating > .form-control {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            color: var(--deep-purple);
+            height: calc(3.5rem + 2px);
+            line-height: 1.25;
+            padding: 1rem 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            border-radius: 12px;
+        }
+
+        .form-floating > .form-control:focus {
+            background: var(--light-beige);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 0.25rem rgba(165, 91, 75, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-floating > label {
+            color: var(--burgundy);
+            padding: 1rem 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-floating > .form-control:focus + label,
+        .form-floating > .form-control:not(:placeholder-shown) + label {
+            color: var(--orange);
+            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+            background: var(--light-beige);
+            padding: 0 0.5rem;
+            border-radius: 5px;
+        }
+
+        .form-floating > .form-control::placeholder {
+            color: transparent;
+        }
+
+        .form-floating > .form-control:focus::placeholder {
+            color: var(--deep-purple);
+            opacity: 0.5;
+        }
+
+        .form-floating > .form-control.is-invalid {
+            border-color: var(--orange);
+            background-image: none;
+        }
+
+        .form-floating > .form-control.is-invalid:focus {
+            box-shadow: 0 0 0 0.25rem rgba(165, 91, 75, 0.25);
+        }
+
+        .form-floating > .form-control.is-valid {
+            border-color: var(--burgundy);
+            background-image: none;
+        }
+
+        .form-floating > .form-control.is-valid:focus {
+            box-shadow: 0 0 0 0.25rem rgba(79, 28, 81, 0.25);
+        }
+
+        .invalid-feedback {
+            color: var(--orange);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            padding-left: 0.5rem;
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .valid-feedback {
+            color: var(--burgundy);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            padding-left: 0.5rem;
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Style pour les champs de mot de passe */
+        .form-floating > .form-control[type="password"] {
+            letter-spacing: 0.1em;
+            font-family: monospace;
+            padding-right: 2.5rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--burgundy);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--orange);
+        }
+
+        /* Style pour le champ téléphone */
+        .form-floating > .form-control[type="tel"] {
+            font-family: monospace;
+            letter-spacing: 0.05em;
+        }
+
+        /* Style pour le champ email */
+        .form-floating > .form-control[type="email"] {
+            text-transform: lowercase;
+        }
+
+        /* Animation pour les champs */
+        @keyframes fieldFocus {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-2px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .form-floating > .form-control:focus {
+            animation: fieldFocus 0.3s ease;
+        }
+
+        /* Style pour les messages d'aide */
+        .form-text {
+            color: var(--burgundy);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            padding-left: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Style pour les champs désactivés */
+        .form-floating > .form-control:disabled {
+            background: rgba(0, 0, 0, 0.05);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Style pour les champs en lecture seule */
+        .form-floating > .form-control[readonly] {
+            background: var(--light-beige);
+            cursor: default;
+        }
+
+        /* Style pour les icônes dans les champs */
+        .form-floating .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--burgundy);
+            z-index: 10;
+        }
+
+        .form-floating > .form-control:focus + .input-icon {
+            color: var(--orange);
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-light) 100%);
+            color: var(--beige);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-custom:hover {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-custom:hover::before {
+            left: 100%;
+        }
+
+        .text-decoration-none {
+            color: var(--burgundy);
+            transition: all 0.3s ease;
+        }
+
+        .text-decoration-none:hover {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo a {
+            color: var(--burgundy);
+            font-size: 2rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo a:hover {
+            color: var(--orange);
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="section">
+                    <div class="logo">
+                        <a href="/"><i class="fas fa-bullhorn"></i>Echo-Anc</a>
+                    </div>
+                    <h2 class="text-center mb-4"><i class="fas fa-user-plus me-2" ></i>Inscription</h2>
+
+                    <form method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Informations personnelles -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="fas fa-user"></i>Informations personnelles
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        
+                                        <label for="{{ form.nom.id_for_label }}"><i class="fas fa-user me-2"></i>Nom</label>
+                                        {{ form.nom }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        
+                                        <label for="{{ form.prenom.id_for_label }}"><i class="fas fa-user me-2"></i>Prénom</label>
+                                        {{ form.prenom }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Coordonnées -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="fas fa-address-card"></i>Coordonnées
+                            </h3>
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    
+                                    <label for="{{ form.email.id_for_label }}"><i class="fas fa-envelope me-2"></i>Email</label>
+                                    {{ form.email }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    
+                                    <label for="{{ form.numeroTelephone.id_for_label }}"><i class="fas fa-phone me-2"></i>Téléphone</label>
+                                    {{ form.numeroTelephone }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sécurité -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="fas fa-shield-alt"></i>Sécurité
+                            </h3>
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    
+                                    <label for="{{ form.password1.id_for_label }}"><i class="fas fa-lock me-2"></i>Mot de passe</label>
+                                    {{ form.password1 }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    
+                                    <label for="{{ form.password2.id_for_label }}"><i class="fas fa-lock me-2"></i>Confirmer le mot de passe</label>
+                                    {{ form.password2 }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image de profil -->
+                        {% comment %} <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="fas fa-camera"></i>Photo de profil
+                            </h3>
+                            <div class="image-upload">
+                                <label for="{{ form.image.id_for_label }}">
+                                    <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                    <br>
+                                    Cliquez pour choisir une image
+                                </label>
+                                {{ form.image }}
+                                <div class="image-preview" id="imagePreview">
+                                    <img src="#" alt="Aperçu" id="preview">
+                                </div>
+                            </div>
+                        </div> {% endcomment %}
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-custom">
+                                <i class="fas fa-user-plus me-2"></i>S'inscrire
+                            </button>
+                        </div>
+                    </form>
+                    {% if form.errors %}
+                        <ul class="errorlist">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }} : {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <div class="text-center mt-4">
+                        <p>Déjà inscrit ? <a href="{% url 'login' %}" class="text-decoration-none">Connectez-vous</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   
+</body>
+</html>
