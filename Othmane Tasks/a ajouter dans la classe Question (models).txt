@@ -1,0 +1,7 @@
+annonce = models.ForeignKey(
+        Annonce, 
+        on_delete=models.CASCADE, 
+        related_name='ann',
+        db_constraint=True,
+        default=None
+    )
