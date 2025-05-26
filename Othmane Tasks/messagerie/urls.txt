@@ -1,0 +1,3 @@
+    path('mes-messages/',views.afficherUserMessages, name='messages-recu'),
+    path('messages/<user_id>/',views.messageRecuNonLus, name='messages-recu-actif'),
+    path('save-messages/',views.ajoutermessage, name='save-messages'),

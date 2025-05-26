@@ -23,5 +23,6 @@ urlpatterns=[
 
     path('user/messages/<int:user_id>',views.EnvoyerMessageAuUser.as_view(), name='messageToUser'),
     path('message/<user_id>',views.messageUserAuUser, name='chat_actif'),
+    path('mes-messages/',views.a)
 
 ]
