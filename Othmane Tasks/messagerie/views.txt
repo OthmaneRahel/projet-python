@@ -1,5 +1,14 @@
 from django.db.models import Q
+from django.db.models import Count
 
+def afficherUserMessages(request):
+    listeUserMessage = User.objects.filter(
+        messages_envoyes__userIdDesti=request.user.id,
+        # messages_recus__userIdSource=user_id
+    ).annotate(
+        num_messages=Count('messages_envoyes')
+    ).distinct()
+    return render(request, 'Utilisateur/Reçu_message.html',{'listeUserMessage': listeUserMessage})
 def messageRecuNonLus(request, user_id):
     userM = User.objects.get(id=user_id)
     print("id user connecte", request.user.id)

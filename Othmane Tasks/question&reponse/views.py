@@ -17,6 +17,7 @@ def afficherResponse(request,question_id,annonce_id):
     annonce = get_object_or_404(Annonce, id=annonce_id)
     questions = Question.objects.filter(annonce_id=annonce_id)
     reponses = Reponses.objects.filter(question_id = question_id);
+    return render(request,"Utilisateur/detail_annonce.html",{"reponses_actif":reponses,'MEDIA_URL': settings.MEDIA_URL,"questions":questions,"annonce":annonce})
 
 def AjouterQuestion(request,annonce_id):
     Question.objects.create(
