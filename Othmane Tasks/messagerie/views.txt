@@ -1,0 +1,62 @@
+from django.db.models import Q
+from django.db.models import Count
+
+def afficherUserMessages(request):
+    listeUserMessage = User.objects.filter(
+        messages_envoyes__userIdDesti=request.user.id,
+        # messages_recus__userIdSource=user_id
+    ).annotate(
+        num_messages=Count('messages_envoyes')
+    ).distinct()
+    return render(request, 'Utilisateur/Reçu_message.html',{'listeUserMessage': listeUserMessage})
+def messageRecuNonLus(request, user_id):
+    userM = User.objects.get(id=user_id)
+    print("id user connecte", request.user.id)
+    print("id user params", user_id)
+    listeUserMessage = User.objects.filter(
+        messages_envoyes__userIdDesti=request.user
+    ).annotate(
+        num_messages=Count('messages_envoyes')
+    ).distinct()
+    messages = Message.objects.filter(
+        Q(userIdDesti=request.user, userIdSource=userM) | 
+        Q(userIdDesti=userM, userIdSource=request.user)
+    ).order_by('date_envoi')
+    
+    for ms in messages:
+        print(ms.contenu)
+    
+    return render(request, 'Utilisateur/Reçu_message.html', {
+        'messagesUser': messages,
+        "user_actif": userM,
+        'listeUserMessage': listeUserMessage
+    })
+def ajoutermessage(request):
+    contenu = request.POST.get("contenu")
+    user_des = request.POST.get("user_id")
+    Message.objects.create(
+        userIdDesti_id = user_des,
+        contenu=contenu,
+        userIdSource_id = request.user.id,
+    )
+    return redirect(f"/messages/{user_des}")
+
+
+
+// modifier la classe de EnvoyerMessageAuUser
+class EnvoyerMessageAuUser(View):
+    def get(self,request,user_id):
+        userMessages = Message.objects.filter(Q(userIdDesti=request.user, userIdSource=user_id) | Q(userIdDesti=user_id, userIdSource=request.user))
+        user_des = User.objects.get(id = user_id)
+        return render(request,"Utilisateur/interfaceChat.html",{"user_actif":user_des,"userMessages":userMessages})
+    
+    def post(self,request,user_id):
+        contenu = request.POST.get("contenu")
+        user_des = request.POST.get("user_id")
+        print(user_des)
+        Message.objects.create(
+            userIdDesti_id = user_des,
+            contenu=contenu,
+            userIdSource_id = request.user.id,
+        )
+        return redirect(f"/user/messages/{user_id}")

@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Messagerie</title>
+    <link rel="stylesheet" href="{% static 'chat.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+<div class="chat-interface">
+    <aside class="sidebar">
+        <h2>Messages</h2>
+        <ul class="doctor-list">
+            {% for userM in listeUserMessage %}
+                <li class="doctor-item">
+                    <a href="{% url 'messages-recu-actif' userM.id %}">
+                        {% if userM.image == 'https://static.vecteezy.com/sy' %}
+                            <img src="{{userM.image}}" alt="" width="15px"> {{ userM.nom }} {{userM.prenom}}
+                        {% else %}
+                            <img src="{{userM.image.url}}" alt="" width="15px"> {{ userM.nom }} {{userM.prenom}}
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+            <li class="doctor-item">
+                <a href="">Retour Au Dashboard</a>
+            </li>
+        </ul>
+    </aside>
+    <main class="chat-section">
+        <header class="chat-header">
+            {% if user_actif %}
+                <h3>Conversation avec client . {{ user_actif.nom }}</h3>
+            {% endif %}
+        </header>
+        <div class="chat-messages">
+            {% for msg in messagesUser %}
+                {% if msg.userIdSource_id == request.user.id %}
+                    <div class="message sent">
+                        <h3 style="padding-bottom: 10px;">Moi</h3>
+                        <p>{{ msg.contenu }}</p>
+                        <small style="float: right;">Envoyé à {{ msg.date_envoi|date }}</small>
+                    </div>
+                {% else %}
+                    <div class="message received">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h3 style="padding-bottom: 10px;margin: 0;">{{ msg.userIdSource.nom|title }}</h3>
+                        </div>
+                        <p>{{ msg.contenu }}</p>
+                        <small style="float: right;">Envoyé à {{ msg.date_envoi|date }}</small>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p class="no-message">Écrivez votre premier message</p>
+            {% endfor %}
+        </div>        
+        {% if user_actif %}
+        <form method="post" action="{% url 'save-messages' %}" class="message-form">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ user_actif.id }}">
+            <input type="text" name="contenu" placeholder="Écrire un message..." required>
+            <button type="submit">Envoyer</button>
+        </form>
+        {% endif %}
+    </main>
+</div>
+</body>
+</html>
