@@ -11,6 +11,7 @@ class InscriptionForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         if commit:
+            user.image = ""
             user.save()
         return user
 
